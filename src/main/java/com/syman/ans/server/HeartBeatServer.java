@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
+import org.springframework.cloud.alicloud.ans.registry.AnsRegistration;
 import org.springframework.cloud.alicloud.context.ans.AnsProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,9 @@ public class HeartBeatServer {
     @Autowired
     private ServerProperties serverProperties;
 
+    @Autowired
+    private AnsRegistration ansRegistration;
+
     private RestTemplate restTemplate;
 
     public HeartBeatServer() {
@@ -52,8 +56,8 @@ public class HeartBeatServer {
             while (true) {
                 try {
                     sendHeartBeat();
-                    //10秒一次
-                    Thread.sleep(10000L);
+                    //60秒一次
+                    Thread.sleep(60000L);
                 } catch (Exception var3) {
                     LOG.error("check task error.", var3);
                 }
@@ -81,10 +85,11 @@ public class HeartBeatServer {
             int port = serverProperties.getPort();
             String serverList = ansProperties.getServerList();
             String serverPort = ansProperties.getServerPort();
+            String dom = ansRegistration.getServiceId();
 
-            LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort);
+            LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
-            request(ip,port,serverList,serverPort);
+            request(ip,port,serverList,serverPort,dom);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,7 +104,7 @@ public class HeartBeatServer {
      * @param url
      * @param serverPort
      */
-    private void request(String ip,int port,String url,String serverPort){
+    private void request(String ip,int port,String url,String serverPort,String dom){
 
         if (restTemplate == null) {
             SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -111,6 +116,7 @@ public class HeartBeatServer {
         JSONObject paramObject = new JSONObject();
         paramObject.put("ip",ip);
         paramObject.put("port",port);
+        paramObject.put("dom",dom);
         MultiValueMap<String,String> map = new LinkedMultiValueMap<>();
         map.add("param",paramObject.toJSONString());
 

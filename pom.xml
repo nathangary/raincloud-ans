@@ -9,7 +9,7 @@
         <version>1.4.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.syman</groupId>
+    <groupId>org.syman</groupId>
     <artifactId>raincloud-ans</artifactId>
     <version>${parent.version}</version>
 
