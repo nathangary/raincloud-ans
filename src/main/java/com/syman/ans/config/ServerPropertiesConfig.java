@@ -1,7 +1,5 @@
 package com.syman.ans.config;
 
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
