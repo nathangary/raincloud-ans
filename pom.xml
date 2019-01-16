@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>raincloud</artifactId>
+        <groupId>org.syman</groupId>
+        <version>1.4.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.syman</groupId>
+    <artifactId>raincloud-ans</artifactId>
+    <version>${parent.version}</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+        <r3.version>1.0.0-SNAPSHOT</r3.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.syman</groupId>
+            <artifactId>raincloud-util</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.syman</groupId>
+            <artifactId>raincloud-web</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-alicloud-ans</artifactId>
+            <version>0.2.0.RELEASE</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

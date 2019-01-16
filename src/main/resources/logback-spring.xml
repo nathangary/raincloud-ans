@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!--<include resource="org/springframework/boot/logging/logback/base.xml" />-->
+
+    <!-- 定义日志文件 输入位置 -->
+    <property name="log_dir" value="home/admin/logs/app"/>
+
+    <!-- 配置日志清理时间，日志最大的历史30天 -->
+    <property name="maxHistory" value="6"/>
+    <!-- 配置日志文件限制 -->
+    <property name="totalSizeCap" value="50GB"/>
+    <!-- 设置单个日志文件的大小限制 -->
+    <property name="maxFileSize" value="1GB"/>
+
+    <property name="PATTERN"
+              value="[%X{EAGLEEYE_TRACE_ID}-%X{EAGLEEYE_RPC_ID}] %d{yyyy-MM-dd HH:mm:ss:SSS} [%t] %-5level %logger{36}.%M - %msg%n"/>
+    <property name="STAND_PATTERN"
+              value="%d{yyyy-MM-dd HH:mm:ss:SSS} %X{EAGLEEYE_TRACE_ID}-%X{EAGLEEYE_RPC_ID} %green([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n"/>
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 对日志进行格式化 -->
+        <encoder>
+            <pattern>${STAND_PATTERN}</pattern>
+            <!--<pattern>%black(控制台-) %red(%d{yyyy-MM-dd HH:mm:ss}) %green([%thread]) %highlight(%-5level) %boldMagenta(%logger{10}) - %cyan(%msg%n)</pattern>-->
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+        <!-- Only log level WARN and above -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+
+    <!-- ERROR级别日志 -->
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 RollingFileAppender-->
+    <appender name="ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/error-log.log</file>
+        <!-- 过滤器，只记录WARN级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <!-- 最常用的滚动策略，它根据时间来制定滚动策略.既负责滚动也负责出发滚动 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--日志输出位置  可相对、和绝对路径 -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/error-log.%i.log</fileNamePattern>
+            <!-- 可选节点，控制保留的归档文件的最大数量，超出数量就删除旧文件假设设置每个月滚动，且<maxHistory>是6，
+            则只保存最近6个月的文件，删除之前的旧文件。注意，删除旧文件是，那些为了归档而创建的目录也会被删除-->
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+
+        <!-- 按照固定窗口模式生成日志文件，当文件大于20MB时，生成新的日志文件。窗口大小是1到3，当保存了3个归档文件后，将覆盖最早的日志。
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+          <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/.log.zip</fileNamePattern>
+          <minIndex>1</minIndex>
+          <maxIndex>3</maxIndex>
+        </rollingPolicy>   -->
+        <!-- 查看当前活动文件的大小，如果超过指定大小会告知RollingFileAppender 触发当前活动文件滚动
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>5MB</maxFileSize>
+        </triggeringPolicy>   -->
+
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- WARN级别日志 appender -->
+    <appender name="WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/warn-log.log</file>
+        <!-- 过滤器，只记录WARN级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/warn-log.%i.log
+            </fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- INFO级别日志 appender -->
+    <appender name="INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/info-log.log</file>
+        <!-- 过滤器，只记录INFO级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/info-log.%i.log
+            </fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- DEBUG级别日志 appender -->
+    <appender name="DEBUG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/debug-log.log</file>
+        <!-- 过滤器，只记录DEBUG级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>DEBUG</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/debug-log.%i.log</fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- TRACE级别日志 appender -->
+    <appender name="TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/trace-log.log</file>
+        <!-- 过滤器，只记录ERROR级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/trace-log.%i.log
+            </fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- TRACE级别日志 appender -->
+    <appender name="RocketmqClientAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/mq-log.log</file>
+        <!-- 过滤器，只记录ERROR级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/mq-log.%i.log
+            </fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- TRACE级别日志 appender -->
+    <appender name="LtsJobClientAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_dir}/job-log.log</file>
+        <!-- 过滤器，只记录ERROR级别的日志 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按天回滚 daily -->
+            <fileNamePattern>${log_dir}/%d{yyyy-MM-dd}/job-log.%i.log
+            </fileNamePattern>
+            <!-- 日志清理时间 -->
+            <maxHistory>${maxHistory}</maxHistory>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <totalSizeCap>${totalSizeCap}</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- root级别   DEBUG -->
+    <root level="INFO">
+        <!-- 控制台输出 -->
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ERROR"/>
+        <appender-ref ref="WARN"/>
+        <!--<appender-ref ref="TRACE"/>-->
+        <!--<appender-ref ref="INFO"/>-->
+        <!--<appender-ref ref="DEBUG"/>-->
+    </root>
+
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="dev">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.springboot.sample" level="INFO"/>
+        <!-- logback为java中的包 -->
+        <logger name="com.jackrain" level="DEBUG" additivity="true">
+            <appender-ref ref="DEBUG"/>
+            <appender-ref ref="INFO"/>
+            <appender-ref ref="TRACE"/>
+        </logger>
+
+        <logger name="com.alibaba.druid" level="DEBUG" additivity="false">
+            <appender-ref ref="DEBUG"/>
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="TRACE"/>
+        </logger>
+
+        <logger name="druid.sql" level="DEBUG" additivity="false">
+            <appender-ref ref="DEBUG"/>
+            <appender-ref ref="ERROR"/>
+            <appender-ref ref="TRACE"/>
+        </logger>
+
+        <logger name="com.aliyun.opensearch" level="ERROR" additivity="false">
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="com.github.ltsopensource" level="ERROR" additivity="false">
+            <appender-ref ref="ERROR"/>
+        </logger>
+
+        <logger name="RocketmqCommon" level="DEBUG" additivity="false">
+            <appender-ref ref="RocketmqClientAppender"/>
+        </logger>
+
+        <logger name="RocketmqRemoting" level="DEBUG" additivity="false">
+            <appender-ref ref="RocketmqClientAppender"/>
+        </logger>
+
+        <logger name="RocketmqClient" level="DEBUG" additivity="false">
+            <appender-ref ref="RocketmqClientAppender"/>
+        </logger>
+
+    </springProfile>
+
+
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+        <logger name="org.springframework.web" level="INFO"/>
+        <logger name="org.springboot.sample" level="INFO"/>
+        <!--<logger name="com.kfit" level="ERROR" />-->
+        <!--<logger name="org.springframework.web" level="INFO"/>-->
+        <!--<logger name="org.springboot.sample" level="INFO" />-->
+        <!-- logback为java中的包 -->
+        <!--<logger name="com.jackrain" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="DEBUG"/>-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--<appender-ref ref="TRACE"/>-->
+        <!--</logger>-->
+
+        <!--<logger name="com.alibaba.dubbo" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="DEBUG"/>-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--<appender-ref ref="TRACE"/>-->
+        <!--</logger>-->
+
+        <!--<logger name="com.alibaba.druid" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="DEBUG"/>-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--<appender-ref ref="TRACE"/>-->
+        <!--</logger>-->
+
+        <!--<logger name="druid.sql" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="DEBUG"/>-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--<appender-ref ref="TRACE"/>-->
+        <!--</logger>-->
+
+        <!--<logger name="com.aliyun.opensearch" level="ERROR" additivity="false">-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--</logger>-->
+
+
+        <!--<logger name="com.github.ltsopensource" level="ERROR" additivity="false">-->
+        <!--<appender-ref ref="ERROR"/>-->
+        <!--</logger>-->
+
+
+        <!--<logger name="RocketmqCommon" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="RocketmqClientAppender" />-->
+        <!--</logger>-->
+
+
+        <!--<logger name="RocketmqRemoting" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="RocketmqClientAppender" />-->
+        <!--</logger>-->
+
+
+        <!--<logger name="RocketmqClient" level="DEBUG" additivity="false">-->
+        <!--<appender-ref ref="RocketmqClientAppender" />-->
+        <!--</logger>-->
+
+
+        <!--log4jdbc -->
+        <!--<logger name="jdbc.sqltiming" level="debug"/>-->
+        <!--<logger name="java.sql.Connection" level="debug" />-->
+        <!--<logger name="java.sql.Statement" level="debug" />-->
+        <!--<logger name="java.sql.PreparedStatement" level="debug" />-->
+        <!--<logger name="java.sql.ResultSet" level="debug" />-->
+    </springProfile>
+
+</configuration>
