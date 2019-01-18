@@ -87,7 +87,7 @@ public class HeartBeatServer {
             String serverPort = ansProperties.getServerPort();
             String dom = ansRegistration.getServiceId();
 
-            LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
+//            LOG.debug("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
             request(ip,port,serverList,serverPort,dom);
 
@@ -121,7 +121,7 @@ public class HeartBeatServer {
         map.add("param",paramObject.toJSONString());
 
         url = "http://" + url + ":" + serverPort + "/vipserver/api/heartbeat";
-        LOG.info(url);
+        LOG.debug(url);
 
         MultiValueMap<String,String> headers = new LinkedMultiValueMap<>();
         headers.add("Accept","*");
