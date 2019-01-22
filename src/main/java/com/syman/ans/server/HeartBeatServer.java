@@ -128,7 +128,7 @@ public class HeartBeatServer {
         HttpEntity<MultiValueMap<String,String>> request = new HttpEntity<>(map,headers);
         ResponseEntity<JSONObject> resp = restTemplate.postForEntity(url,request,JSONObject.class);
 
-        LOG.info(resp.getBody().toJSONString());
+//        LOG.debug(resp.getBody().toJSONString());
 
 
     }
