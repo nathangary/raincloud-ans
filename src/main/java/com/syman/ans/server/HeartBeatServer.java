@@ -60,7 +60,7 @@ public class HeartBeatServer {
             while (heartBeat) {
                 try {
                     if (ansApplicationProperties != null){
-                        heartBeat = ansApplicationProperties.getHeartBeat();
+                        heartBeat = ansApplicationProperties.isHeartBeat();
                         LOG.info("=====>" + heartBeat);
                     }
                     sendHeartBeat();

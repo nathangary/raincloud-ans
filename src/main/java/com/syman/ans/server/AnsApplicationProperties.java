@@ -1,5 +1,7 @@
 package com.syman.ans.server;
 
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -14,17 +16,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @ConfigurationProperties(prefix = "spring.cloud.burgeon.ans")
+@Data
 public class AnsApplicationProperties {
 
-    public Boolean getHeartBeat() {
-        return heartBeat;
-    }
-
-    public void setHeartBeat(Boolean heartBeat) {
-        this.heartBeat = heartBeat;
-    }
-
 //    @Value("${spring.cloud.burgeon.ans.heartBea}")
-    private Boolean heartBeat;
-
+    private boolean heartBeat;
 }
