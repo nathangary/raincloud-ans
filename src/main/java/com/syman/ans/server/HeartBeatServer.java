@@ -35,6 +35,9 @@ public class HeartBeatServer {
     @Autowired
     private AnsRegistration ansRegistration;
 
+    @Autowired
+    private AnsApplicationProperties ansApplicationProperties;
+
     private RestTemplate restTemplate;
 
     public HeartBeatServer() {
@@ -47,14 +50,19 @@ public class HeartBeatServer {
     private class HeartBeat implements Runnable {
 
         private Thread thread = new Thread(this, "com.syman.ans.server.heartbeat.task");
+        private boolean heartBeat = true;
 
         public HeartBeat() {
             this.thread.start();
         }
 
         public void run() {
-            while (true) {
+            while (heartBeat) {
                 try {
+                    if (ansApplicationProperties != null){
+                        heartBeat = ansApplicationProperties.getHeartBeat();
+                        LOG.info("=====>" + heartBeat);
+                    }
                     sendHeartBeat();
                     //60秒一次
                     Thread.sleep(60000L);
@@ -87,7 +95,7 @@ public class HeartBeatServer {
             String serverPort = ansProperties.getServerPort();
             String dom = ansRegistration.getServiceId();
 
-//            LOG.debug("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
+            LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
             request(ip,port,serverList,serverPort,dom);
 
