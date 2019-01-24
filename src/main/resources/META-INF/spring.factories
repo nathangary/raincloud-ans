@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.syman.ans.server.HeartBeatServer
+com.syman.ans.server.HeartBeatServer,\
+com.syman.ans.server.AnsApplicationProperties

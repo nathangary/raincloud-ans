@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * 发送心跳服务
+ *
  * @author: z.c
  * @since: 2019/1/15
  * create at : 2019/1/15 3:58 PM
@@ -50,19 +51,14 @@ public class HeartBeatServer {
     private class HeartBeat implements Runnable {
 
         private Thread thread = new Thread(this, "com.syman.ans.server.heartbeat.task");
-        private boolean heartBeat = true;
 
         public HeartBeat() {
             this.thread.start();
         }
 
         public void run() {
-            while (heartBeat) {
+            while (true) {
                 try {
-                    if (ansApplicationProperties != null){
-                        heartBeat = ansApplicationProperties.isHeartBeat();
-                        LOG.info("=====>" + heartBeat);
-                    }
                     sendHeartBeat();
                     //60秒一次
                     Thread.sleep(60000L);
@@ -80,12 +76,23 @@ public class HeartBeatServer {
 
         try {
 
+            if (ansApplicationProperties == null) {
+                LOG.error("ansApplicationProperties is null");
+                return;
+            }
+
             if (ansProperties == null) {
                 LOG.error("ansProperties is null");
                 return;
             }
             if (serverProperties == null) {
                 LOG.error("serverProperties is null");
+                return;
+            }
+
+            boolean heartBeat = ansApplicationProperties.isHeartBeat();
+            if (!heartBeat){
+                LOG.debug("heartBeat=====>" + heartBeat);
                 return;
             }
 
@@ -97,7 +104,7 @@ public class HeartBeatServer {
 
             LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
-            request(ip,port,serverList,serverPort,dom);
+            request(ip, port, serverList, serverPort, dom);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,12 +114,13 @@ public class HeartBeatServer {
 
     /**
      * 请求服务端
+     *
      * @param ip
      * @param port
      * @param url
      * @param serverPort
      */
-    private void request(String ip,int port,String url,String serverPort,String dom){
+    private void request(String ip, int port, String url, String serverPort, String dom) {
 
         if (restTemplate == null) {
             SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -122,19 +130,19 @@ public class HeartBeatServer {
         }
         //
         JSONObject paramObject = new JSONObject();
-        paramObject.put("ip",ip);
-        paramObject.put("port",port);
-        paramObject.put("dom",dom);
-        MultiValueMap<String,String> map = new LinkedMultiValueMap<>();
-        map.add("param",paramObject.toJSONString());
+        paramObject.put("ip", ip);
+        paramObject.put("port", port);
+        paramObject.put("dom", dom);
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("param", paramObject.toJSONString());
 
         url = "http://" + url + ":" + serverPort + "/vipserver/api/heartbeat";
         LOG.debug(url);
 
-        MultiValueMap<String,String> headers = new LinkedMultiValueMap<>();
-        headers.add("Accept","*");
-        HttpEntity<MultiValueMap<String,String>> request = new HttpEntity<>(map,headers);
-        ResponseEntity<JSONObject> resp = restTemplate.postForEntity(url,request,JSONObject.class);
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add("Accept", "*");
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        ResponseEntity<JSONObject> resp = restTemplate.postForEntity(url, request, JSONObject.class);
 
 //        LOG.debug(resp.getBody().toJSONString());
 
