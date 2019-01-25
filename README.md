@@ -16,4 +16,6 @@
     </dependency>
      
     Application主入口加上@EnableDiscoveryClient注解即可
+    #配置参数 true开启心跳，false关闭心跳，默认false
+    spring.cloud.burgeon.ans.heartBeat=false
 
