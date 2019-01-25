@@ -102,12 +102,13 @@ public class HeartBeatServer {
             String serverPort = ansProperties.getServerPort();
             String dom = ansRegistration.getServiceId();
 
-            LOG.info("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
+            LOG.debug("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
             request(ip, port, serverList, serverPort, dom);
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            LOG.error("" + e.getMessage());
         }
 
     }
