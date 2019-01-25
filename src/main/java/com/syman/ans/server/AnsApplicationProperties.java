@@ -20,5 +20,5 @@ import org.springframework.stereotype.Component;
 public class AnsApplicationProperties {
 
 //    @Value("${spring.cloud.burgeon.ans.heartBea}")
-    private boolean heartBeat;
+    private boolean heartBeat = true;
 }
