@@ -3,7 +3,6 @@ package com.jackrain.ans.server;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.alicloud.ans.registry.AnsRegistration;
 import org.springframework.cloud.alicloud.context.ans.AnsProperties;
 import org.springframework.http.HttpEntity;
@@ -27,9 +26,6 @@ public class HeartBeatServer {
 
     @Autowired
     private AnsProperties ansProperties;
-
-    @Autowired
-    private ServerProperties serverProperties;
 
     @Autowired
     private AnsRegistration ansRegistration;
@@ -75,18 +71,18 @@ public class HeartBeatServer {
         try {
 
             if (ansApplicationProperties == null) {
-                log.error("ansApplicationProperties is null");
+                log.debug("ansApplicationProperties is null");
                 return;
             }
 
             if (ansProperties == null) {
-                log.error("ansProperties is null");
+                log.debug("ansProperties is null");
                 return;
             }
-            if (serverProperties == null) {
-                log.error("serverProperties is null");
-                return;
-            }
+//            if (serverProperties == null) {
+//                log.error("serverProperties is null");
+//                return;
+//            }
 
             boolean heartBeat = ansApplicationProperties.isHeartBeat();
             if (!heartBeat){
@@ -95,7 +91,8 @@ public class HeartBeatServer {
             }
 
             String ip = ansProperties.getClientIp();
-            int port = serverProperties.getPort();
+//            Integer port = serverProperties.getPort();
+            int port = ansProperties.getClientPort();
             String serverList = ansProperties.getServerList();
             String serverPort = ansProperties.getServerPort();
             String dom = ansRegistration.getServiceId();
@@ -105,7 +102,7 @@ public class HeartBeatServer {
             request(ip, port, serverList, serverPort, dom);
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             log.error("sendHeartBeat Exception==>" + e.getMessage());
         }
 

@@ -21,4 +21,6 @@ public class AnsApplicationProperties {
 
 //    @Value("${spring.cloud.burgeon.ans.heartBea}")
     private boolean heartBeat = true;
+
+
 }
