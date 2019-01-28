@@ -1,8 +1,7 @@
-package com.syman.ans.server;
+package com.jackrain.ans.server;
 
 import com.alibaba.fastjson.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.cloud.alicloud.ans.registry.AnsRegistration;
@@ -23,9 +22,8 @@ import org.springframework.web.client.RestTemplate;
  * create at : 2019/1/15 3:58 PM
  */
 @Service
+@Slf4j
 public class HeartBeatServer {
-
-    private static Logger LOG = LoggerFactory.getLogger(HeartBeatServer.class);
 
     @Autowired
     private AnsProperties ansProperties;
@@ -63,7 +61,7 @@ public class HeartBeatServer {
                     //60秒一次
                     Thread.sleep(60000L);
                 } catch (Exception var3) {
-                    LOG.error("check task error.", var3);
+                    log.error("check task error.", var3);
                 }
             }
         }
@@ -77,22 +75,22 @@ public class HeartBeatServer {
         try {
 
             if (ansApplicationProperties == null) {
-                LOG.error("ansApplicationProperties is null");
+                log.error("ansApplicationProperties is null");
                 return;
             }
 
             if (ansProperties == null) {
-                LOG.error("ansProperties is null");
+                log.error("ansProperties is null");
                 return;
             }
             if (serverProperties == null) {
-                LOG.error("serverProperties is null");
+                log.error("serverProperties is null");
                 return;
             }
 
             boolean heartBeat = ansApplicationProperties.isHeartBeat();
             if (!heartBeat){
-                LOG.debug("heartBeat=====>" + heartBeat);
+                log.debug("heartBeat=====>" + heartBeat);
                 return;
             }
 
@@ -102,13 +100,13 @@ public class HeartBeatServer {
             String serverPort = ansProperties.getServerPort();
             String dom = ansRegistration.getServiceId();
 
-            LOG.debug("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
+            log.debug("ip:" + ip + " port:" + port + " serverList:" + serverList + " serverPort:" + serverPort + " dom:" + dom);
 
             request(ip, port, serverList, serverPort, dom);
 
         } catch (Exception e) {
-//            e.printStackTrace();
-            LOG.error("" + e.getMessage());
+            e.printStackTrace();
+            log.error("sendHeartBeat Exception==>" + e.getMessage());
         }
 
     }
@@ -138,7 +136,7 @@ public class HeartBeatServer {
         map.add("param", paramObject.toJSONString());
 
         url = "http://" + url + ":" + serverPort + "/vipserver/api/heartbeat";
-        LOG.debug(url);
+        log.debug(url);
 
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
         headers.add("Accept", "*");

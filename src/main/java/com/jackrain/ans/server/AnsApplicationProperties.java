@@ -1,4 +1,4 @@
-package com.syman.ans.server;
+package com.jackrain.ans.server;
 
 import lombok.Data;
 import lombok.Getter;

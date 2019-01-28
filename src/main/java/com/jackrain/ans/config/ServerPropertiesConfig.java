@@ -1,4 +1,4 @@
-package com.syman.ans.config;
+package com.jackrain.ans.config;
 
 import org.springframework.context.annotation.Configuration;
 

@@ -1,4 +1,4 @@
-package com.syman.ans;
+package com.jackrain.ans;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
