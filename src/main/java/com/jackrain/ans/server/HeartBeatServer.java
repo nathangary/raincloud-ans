@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
  * @since: 2019/1/15
  * create at : 2019/1/15 3:58 PM
  */
-@Service
 @Slf4j
 public class HeartBeatServer {
 
@@ -50,6 +49,7 @@ public class HeartBeatServer {
             this.thread.start();
         }
 
+        @Override
         public void run() {
             while (true) {
                 try {

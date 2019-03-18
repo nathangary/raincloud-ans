@@ -1,3 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jackrain.ans.server.HeartBeatServer,\
-com.jackrain.ans.server.AnsApplicationProperties
+com.jackrain.ans.config.AnsConfig

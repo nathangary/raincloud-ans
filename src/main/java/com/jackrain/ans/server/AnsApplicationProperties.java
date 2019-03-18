@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
  * create at : 2019/1/23 9:57 AM
  *
  */
-@Component
 @ConfigurationProperties(prefix = "spring.cloud.burgeon.ans")
 @Data
 public class AnsApplicationProperties {
