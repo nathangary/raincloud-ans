@@ -12,6 +12,10 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * RestTemplate权限拦截 添加相关Header
@@ -28,13 +32,18 @@ public class AuthRequestInterceptor implements ClientHttpRequestInterceptor {
         if (attrs != null) {
             HttpServletRequest request = attrs.getRequest();
             // 如果在Cookie内通过如下方式取
-            Cookie[] cookies = request.getCookies();
-            if (cookies != null && cookies.length > 0) {
-                for (Cookie cookie : cookies) {
-                    headers.add(cookie.getName(), cookie.getValue());
+            Cookie[] cookieArr = request.getCookies();
+            List<String> cookieList = new ArrayList<>();
+            if (cookieArr != null && cookieArr.length > 0) {
+                for (Cookie cookie : cookieArr) {
+                    cookieList.add( cookie.getName()+"="+cookie.getValue());
                 }
             } else {
                 log.warn("HeadConfiguration", "获取Cookie失败！");
+            }
+
+            if(cookieList != null){
+                headers.put(HttpHeaders.COOKIE,cookieList);
             }
         }
         return clientHttpRequestExecution.execute(httpRequest,bytes);
