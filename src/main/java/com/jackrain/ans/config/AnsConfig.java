@@ -5,6 +5,7 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.jackrain.ans.server.AnsApplicationProperties;
 import com.jackrain.ans.server.HeartBeatServer;
+import com.jackrain.nea.web.conf.CusResponseErrorHandler;
 import com.jackrain.nea.web.conf.CusRestTemplate;
 import feign.RequestInterceptor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +44,7 @@ public class AnsConfig {
     @LoadBalanced
     public CusRestTemplate restTemplateRibbon(SimpleClientHttpRequestFactory factory){
         CusRestTemplate restTemplate = new CusRestTemplate(factory);
+        restTemplate.setErrorHandler(new CusResponseErrorHandler());
 
         List<HttpMessageConverter<?>> httpMessageConverterList= restTemplate.getMessageConverters();
         //创建FastJson信息转换对象
