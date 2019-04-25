@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.jackrain.ans.config.AnsConfig
+com.jackrain.ans.AnsServiceApplication
