@@ -51,6 +51,7 @@ public class AnsConfig {
         // 中文乱码解决方案
         List<MediaType> mediaTypes = new ArrayList<>();
         mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);//设定json格式且编码为UTF-8
+        mediaTypes.add(MediaType.TEXT_HTML);
         fastJsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
         //规则赋予转换对象
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
