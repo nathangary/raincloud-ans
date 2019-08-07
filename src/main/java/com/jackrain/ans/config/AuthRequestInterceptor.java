@@ -43,7 +43,7 @@ public class AuthRequestInterceptor implements ClientHttpRequestInterceptor {
                 log.warn("HeadConfiguration", "获取Cookie失败！");
             }
 
-            if(cookieList != null){
+            if(cookieList != null && !headers.containsKey(HttpHeaders.COOKIE)){
                 headers.put(HttpHeaders.COOKIE,cookieList);
             }
         }
