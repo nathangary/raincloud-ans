@@ -11,11 +11,15 @@
     #maven使用方式：
     <dependency>
         <groupId>org.syman</groupId>
-        <artifactId>raincloud-ans</artifactId>
-        <version>${parent.version}</version>
+        <artifactId>raincloud-micro</artifactId>
+        <version>1.4.0-SNAPSHOT</version>
     </dependency>
      
     Application主入口加上@EnableDiscoveryClient注解即可
     #配置参数 true开启心跳，false关闭心跳，默认true
     spring.cloud.burgeon.ans.heartBeat=false
+    
+    #地址配置
+    spring.cloud.alicloud.ans.server-list=${spring.cloud.alicloud.ans.server-list}
+    spring.cloud.alicloud.ans.server-port=${spring.cloud.alicloud.ans.server-port}
 
